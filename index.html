@@ -140,7 +140,7 @@
 
       fetch("https://script.google.com/macros/s/AKfycbx77HwFpNn4rAkU8ZCT01T3fbF74O-5bBAxBXb3Q-fNsEhajoaXn5G_0zbIPHeRsTTdqg/exec", {
         method: "POST",
-        mode: "no-cors",
+        mode: "cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
