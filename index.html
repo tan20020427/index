@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>你是怎樣的人？心理測驗</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      line-height: 1.6;
+      background-image: url('https://github.com/tan20020427/-/blob/main/winter-de-aespa-girls-real-world-10334.jpg?raw=true');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center top 20%;
+      color: #333;
+    }
+    .question {
+      margin-bottom: 20px;
+      background: rgba(255,255,255,0.7);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 8px;
+    }
+    button:hover {
+      background-color: #ffa500;
+    }
+    input[type="text"], input[type="email"], input[type="number"], select, textarea {
+      padding: 8px;
+      width: 100%;
+      margin: 5px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #result img {
+      width: 100%;
+      border-radius: 8px;
+      margin: 10px 0;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+    #result {
+      background: #fff8dc;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center; font-size: 2.2em; background-color: #fff3cd; padding: 10px; border-radius: 10px;">🎭 你是怎樣的人？心理漫畫測驗 🎭</h1>
+
+  <form id="quizForm">
+    <div id="questions"></div>
+
+    <div class="question">
+      <h3>填寫你的資料</h3>
+      <label>名字：<input type="text" name="name" required></label><br>
+      <label>年齡：<input type="number" name="age" required></label><br>
+      <label>性別：
+        <select name="gender" required>
+          <option value="">請選擇</option>
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+          <option value="other">其他</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="question">
+      <h3>寫下你的心得或留言 😄</h3>
+      <textarea name="feedback" placeholder="寫下你玩完這個測驗的感受、建議或想說的話..." rows="5"></textarea>
+    </div>
+
+    <button type="submit">🎬 看結果！</button>
+  </form>
+
+  <div id="result" class="question" style="display: none;"></div>
+
+  <script>
+    const questions = [
+      ["1. 遇到壓力你會怎麼處理？", ["冷靜分析找解法", "馬上行動排解", "找朋友聊聊", "放空耍廢一下"]],
+      ["2. 在團體中你通常是？", ["做決定的人", "帶頭衝的人", "靜靜聽的人", "笑點最多的人"]],
+      ["3. 你最討厭什麼情況？", ["混亂沒規則", "原地踏步", "情緒被忽視", "被束縛或限制"]],
+      ["4. 喜歡的週末活動？", ["閱讀、自我進修", "戶外冒險、運動", "咖啡廳、聊心事", "隨性旅行"]],
+      ["5. 選一種你比較相信的句子：", ["凡事都有邏輯", "有行動才有機會", "傾聽比說話重要", "活在當下最快樂"]],
+      ["6. 聚會中你是？", ["規劃活動的人", "帶動氣氛的人", "默默陪伴的人", "偶爾神隱的人"]],
+      ["7. 你最重視朋友的什麼？", ["誠實與理性溝通", "陪你衝陪你瘋", "真心與細膩", "尊重自由、沒壓力"]],
+      ["8. 你處理衝突時會？", ["冷靜對話理性分析", "馬上解決不要拖", "先理解對方感受", "先閃一下，等風頭過"]],
+      ["9. 你最常讓人說的一句是？", ["你很理性欸", "哇你超敢的！", "你好溫柔喔", "你真的有夠怪😂"]],
+      ["10. 如果要換一種人生風格，你想？", ["更有規劃、更效率", "更敢衝、更有冒險", "更溫柔、更靠近人心", "更自由、沒有人管我"]]
+    ];
+
+    const container = document.getElementById("questions");
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<p>${q[0]}</p>` +
+        q[1].map((choice, idx) => {
+          const letter = ["A", "B", "C", "D"][idx];
+          return `<label><input type="radio" name="q${i+1}" value="${letter}" required> ${choice}</label><br>`;
+        }).join("");
+      container.appendChild(div);
+    });
+
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const scores = { A: 0, B: 0, C: 0, D: 0 };
+      const data = {
+        name: formData.get("name"),
+        age: formData.get("age"),
+        gender: formData.get("gender"),
+        feedback: formData.get("feedback"),
+        answers: [],
+        resultType: ""
+      };
+      for (let i = 1; i <= 10; i++) {
+        const val = formData.get("q" + i);
+        data.answers.push(val);
+        if (scores[val]) scores[val]++;
+      }
+      let top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      data.resultType = top;
+
+      fetch("https://script.google.com/macros/s/AKfycbx77HwFpNn4rAkU8ZCT01T3fbF74O-5bBAxBXb3Q-fNsEhajoaXn5G_0zbIPHeRsTTdqg/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      document.getElementById("quizForm").style.display = "none";
+      const result = document.getElementById("result");
+      result.style.display = "block";
+      const personality = {
+        A: `<h3>🧠 A型人格：冷靜規劃的理性派</h3><img src='https://i.imgur.com/X3lP6fs.png'><p>你像是一台思考型AI！總是在做最周全的準備。朋友遇難都會來找你當軍師，雖然偶爾太理智會被說太無趣，但其實你是個超可靠的大腦中心，還可能是被低估的搞笑天才！</p>`,
+        B: `<h3>🔥 B型人格：衝鋒陷陣的行動王</h3><img src='https://i.imgur.com/VD1jF1h.png'><p>你是戰士型人格，凡事不拖延直接幹！遇到困難先衝再說，旁人都還在想的時候你已經跳下去打了。偶爾也會不小心撞牆，但你的勇氣常常讓人佩服又捧腹～</p>`,
+        C: `<h3>💖 C型人格：溫暖細膩的心靈守護者</h3><img src='https://i.imgur.com/2k4MZgR.png'><p>你像是人群中的小太陽，總是能察覺別人的情緒與需要。你的同理心讓你很受歡迎，也很容易當上傾聽王。雖然你自己有時會累，但別人會偷偷感激你超多！</p>`,
+        D: `<h3>🌀 D型人格：自由奔放的獨行俠</h3><img src='https://i.imgur.com/NxtH2eX.png'><p>你就是傳說中的怪人！有自己的節奏、不在乎主流、不想被管，你的創意可能來自凌晨3點突然醒來的念頭。別人可能無法理解你，但你根本不在乎。超帥。</p>`
+      };
+      result.innerHTML = `<h2>✨ 你的漫畫人格測驗結果 ✨</h2>${personality[top]}`;
+    });
+  </script>
+</body>
+</html>
