@@ -124,15 +124,15 @@
       const formData = new FormData(this);
       const scores = { A: 0, B: 0, C: 0, D: 0 };
       const data = {
-        name: formData.get("name"),
-        age: formData.get("age"),
-        gender: formData.get("gender"),
-        feedback: formData.get("feedback"),
-        resultType: ""
-      };
+  name: formData.get("name"),
+  age: formData.get("age"),
+  gender: formData.get("gender"),
+  feedback: formData.get("feedback"),
+  resultType: ""
+  // 不需要 answers
+};
       for (let i = 1; i <= 10; i++) {
         const val = formData.get("q" + i);
-        data.answers.push(val);
         if (scores[val]) scores[val]++;
       }
       let top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
